@@ -13,11 +13,11 @@ if len(sys.argv) == 2:
 	print ("Running featureTrajectories on "+sys.argv[1])
 	dataset = sys.argv[1]
 else:
-	print ("Running featureTrajectories on data/MIB_datasample.csv")
-	dataset = 'data/MIB_datasample.csv'
+	print ("Running featureTrajectories on data/manchester_attack.csv")
+	tweetList, t1_time, t2_time = readTweets.getTweets('data/manchester_attack.csv')
 
 # bucketSize (1=seconds,60=minutes,3600=hours,86400=days)
-bucketSize = 86400
+bucketSize = 60
 
 #signiTrend properties
 window_size = 4

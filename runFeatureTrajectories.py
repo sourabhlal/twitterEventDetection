@@ -16,14 +16,14 @@ if len(sys.argv) == 2:
 	print ("Running featureTrajectories on "+sys.argv[1])
 	tweetList, t1_time, t2_time = readTweets.getTweets(sys.argv[1])
 else:
-	print ("Running featureTrajectories on data/MIB_datasample.csv")
-	tweetList, t1_time, t2_time = readTweets.getTweets('data/MIB_datasample.csv')
+	print ("Running featureTrajectories on data/manchester_attack.csv")
+	tweetList, t1_time, t2_time = readTweets.getTweets('data/manchester_attack.csv')
 
 for t in tweetList:
 	t["text"]=preprocessing.getTokens(t["text"],False)
 
 # bucketSize (1=seconds,60=minutes,3600=hours,86400=days)
-bucketSize = 86400
+bucketSize = 60
 
 #build feature trajectories
 features, Mf = dr.build_feature_trajectories(tweetList, t1_time, t2_time, bucketSize)
