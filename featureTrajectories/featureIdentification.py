@@ -25,11 +25,12 @@ def spectral_analysis_for_dominant_period(featureTrajectory):
 def average_dfidf(featureTrajectory):
 	return np.mean(featureTrajectory)
 
-def heuristic_stop_word_detection(features, stopwords):
+def heuristic_stop_word_detection(features, stopwords,FLAG):
 	"""
 	Find max DPS, DFIDF, and min DFIDF from stopwords seed	
 	:param feaures: list of features (dictionary with feature as key, feature trajectory as value)
 	:param stopwords: list of stopwords
+	:param FLAG: flag to manually set UDPS
 	Returns features: features without stopwords
 	Returns stopwords: updated list of stopwords
 	Returns UDPS: max DPS of set of stopwords
@@ -46,7 +47,10 @@ def heuristic_stop_word_detection(features, stopwords):
 			print (sw, dps, dp)
 			avg_dfidf = average_dfidf(trajectory)
 			if dps>UDPS:
-				UDPS=2800  #TOFIX make this dps
+				if FLAG > 0:
+					UDPS=FLAG
+				else:
+					UDPS=dps
 			if avg_dfidf>UDFIDF:
 				UDFIDF=avg_dfidf
 			elif LDFIDF<avg_dfidf:
@@ -64,7 +68,7 @@ def heuristic_stop_word_detection(features, stopwords):
 		features.pop(s, None)
 	return features, stopwords, UDPS
 
-def categorizing_features(features):
+def categorizing_features(features, FLAG):
 	"""
 	Categorizes features
 	:param feaures: list of features (dictionary with feature as key, feature trajectory as value)
@@ -77,9 +81,9 @@ def categorizing_features(features):
 	HL = []
 	LH = []
 	LL = []
-	SW = ["i","a","about","an","and","are","as","at","be","by","com","for","from","how","in","is","it","of","on","or","that","this","to","was","what","when","where","who","will","with","the","www","you", "my", "me", "so", "just", "but", "i'm"]
+	SW = ["a", "about", "an", "and", "are", "as", "at", "be", "but", "by", "com", "for", "from", "how", "i", "i'm", "in", "is", "it", "just", "me", "my", "of", "on", "or", "so", "that", "the", "this", "to", "was", "what", "when", "where", "who", "will", "with", "www", "you"]
 
-	features, SW, UDPS = heuristic_stop_word_detection(features, SW)
+	features, SW, UDPS = heuristic_stop_word_detection(features, SW, FLAG)
 	for f, featureTrajectory in features.items():
 		p_f,s_f = spectral_analysis_for_dominant_period(featureTrajectory)
 		if p_f > len(featureTrajectory)/2 and s_f > UDPS:
