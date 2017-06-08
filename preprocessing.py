@@ -45,7 +45,7 @@ def removeEmojis(text):
 	"""
 	return ''.join(c for c in text if c <= '\uFFFF')
 
-def get_tokens(tweetText,removeStopwords):
+def getTokens(tweetText,removeStopwords):
 	"""
 	Takes a string and tokenizes it
 	:param tweetText: string to be tokenized
@@ -65,8 +65,8 @@ def get_tokens(tweetText,removeStopwords):
 		.translate(string.punctuation).split()
 
 	# stem the words & remove stopwords
-	stopwords = ["i","a","about","an","and","are","as","at","be","by","com","for","from","how","in","is","it","of","on","or","that","this","to","was","what","when","where","who","will","with","the","www", "you", "me", "so", "my","they","your","but","i'm","he","his","if","do","it's","we","him","her","has"]
 	if removeStopwords:
+		stopwords = ["i","a","about","an","and","are","as","at","be","by","com","for","from","how","in","is","it","of","on","or","that","this","to","was","what","when","where","who","will","with","the","www", "you", "me", "so", "my","they","your","but","i'm","he","his","if","do","it's","we","him","her","has"]
 		words = [word for word in words if word not in stopwords]
 	filtered_words = [word for word in words if len(word)>1]
 	filtered_words = [remove_symbol_headTail(w) for w in filtered_words]
