@@ -1,4 +1,7 @@
-import sys, csv
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys
 from collections import defaultdict
 
 from featureTrajectories import dataRepresentation as dr
