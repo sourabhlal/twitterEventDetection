@@ -12,9 +12,6 @@ from featureTrajectories import eventsFromFeatures as ef
 import preprocessing
 import readTweets
 
-def tokenize(tweet):
-    tweet["text"]=preprocessing.getTokens(tweet["text"],False)
-
 if len(sys.argv) == 2:
 	print ("Running featureTrajectories on "+sys.argv[1])
 	tweetList, t1_time, t2_time = readTweets.getTweets(sys.argv[1])
@@ -23,10 +20,13 @@ else:
 	tweetList, t1_time, t2_time = readTweets.getTweets('data/MIB_datasample.csv')
 
 for t in tweetList:
-	tokenize(t)
+	t["text"]=preprocessing.getTokens(t["text"],False)
+
+# bucketSize (1=seconds,60=minutes,3600=hours,86400=days)
+bucketSize = 86400
 
 #build feature trajectories
-features, Mf = dr.build_feature_trajectories(tweetList, t1_time, t2_time, 86400)
+features, Mf = dr.build_feature_trajectories(tweetList, t1_time, t2_time, bucketSize)
 
 #categorize features
 """
