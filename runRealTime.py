@@ -243,16 +243,23 @@ tweetList, t1_time, t2_time = getTweets(dataset)
 for t in tweetList:
 	t["tokens"]=getTokens(t["text"],False)
 
-featTraj = build_feature_trajectories(tweetList,t1_time,t2_time,60)
+# bucketSize (1=seconds,60=minutes,3600=hours,86400=days)
+bucketSize = 60
+
+featTraj = build_feature_trajectories(tweetList,t1_time,t2_time,bucketSize)
 
 #number of bursts we want to track
-numBursts = 10
+numBursts = 80
+
+#how often do we check for a burst
+burstCheckFrequency = 10
 
 #max number of tweets in an event
 maxbucketSize = 50
 
 #similarity threshold for filtering tweets
 similarityThreshold = 0.5
+burstRate = 0.5
 buckets = [[] for x in range(numBursts)]
 
 def getTime(i):
@@ -264,13 +271,29 @@ def getText(i):
 	return tweet["text"]
 
 def printBucketStatus(idx):
+	bucket = buckets[idx]
+	bucketTweets = [getText(x) for x in bucket]
+	print ("EVENT = " + str(bucketTweets))
+
+
+def checkBurst(id):
+	bucketGrowthRate = []
+	current_time = getTime(id)
 	for bucket in buckets:
-		if len(bucket) < 15:
-			continue
-		else:
-			bucketTweets = [getText(x) for x in bucket]
-			print (str(idx)+" EVENT = " + str(bucketTweets))
-			import ipdb; ipdb.set_trace()
+		if len(bucket)>maxbucketSize/5:
+			bucketTimeDiff = current_time-min([getTime(i)for i in bucket])
+			try:
+				growth = float(len(bucket))/bucketTimeDiff
+			except ZeroDivisionError:
+				growth = 0
+			bucketGrowthRate.append(growth)
+	burstingEvents = []
+	for i,t in enumerate(bucketGrowthRate):
+		if t > burstRate:
+			burstingEvents.append(i)
+	for i in burstingEvents:
+		printBucketStatus(i)
+
 
 def bucketTweet(tweetId,nearestNeighbour,min_dis):
 	for i,bucket in enumerate(buckets):
@@ -352,4 +375,7 @@ for idx,tweet in enumerate(tweetList):
 
 	#insert new tweet in the table
 	hashTable.index(sparseVec,extra_data=idx)
-	printBucketStatus(idx)
+
+	#check for burst 
+	if idx % burstCheckFrequency == 0:
+		checkBurst(idx)
