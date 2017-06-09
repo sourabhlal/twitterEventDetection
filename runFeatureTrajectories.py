@@ -9,15 +9,17 @@ from featureTrajectories import featureIdentification as fi
 from featureTrajectories import identifyingBursts as ib
 from featureTrajectories import eventsFromFeatures as ef
 
-import preprocessing
-import readTweets
+from helper import preprocessing
+from helper import readTweets
 
 if len(sys.argv) == 2:
 	print ("Running featureTrajectories on "+sys.argv[1])
-	tweetList, t1_time, t2_time = readTweets.getTweets(sys.argv[1])
+	dataset = sys.argv[1]
 else:
 	print ("Running featureTrajectories on data/manchester_attack.csv")
-	tweetList, t1_time, t2_time = readTweets.getTweets('data/manchester_attack.csv')
+	dataset = 'data/manchester_attack.csv'
+
+tweetList, t1_time, t2_time = readTweets.getTweets(dataset)
 
 for t in tweetList:
 	t["text"]=preprocessing.getTokens(t["text"],False)
@@ -34,9 +36,9 @@ NOTE:
 To manually set the boundary between important and unimportant events, set FLAG to your selected value
 If the FLAG is set to 0 or a negative number featureTrajectories will set it based on the heuristics of the stopwords.
 """
-FLAG=0
+FLAG=25
 HH,LH,HL,LL = fi.categorizing_features(features,FLAG)
-
+print (HH)
 #remove noisy features
 for LLf in LL:
     features.pop(LLf[0],None)

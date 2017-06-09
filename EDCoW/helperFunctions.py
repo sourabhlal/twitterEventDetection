@@ -9,8 +9,8 @@ import numpy as np
 from collections import Counter
 from tqdm import tqdm
 
-import preprocessing
-import readTweets
+from helper import preprocessing
+from helper import readTweets
 
 def shannon_entropy(distribution):
 	sum = 0.0

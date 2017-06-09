@@ -11,16 +11,19 @@ from tqdm import tqdm
 
 from EDCoW import helperFunctions as edcow
 
-import preprocessing
-import readTweets
+from helper import preprocessing
+from helper import readTweets
 
 # Get all tweets
 if len(sys.argv) == 2:
-	print ("Running featureTrajectories on "+sys.argv[1])
-	tweetList, t1_time, t2_time = readTweets.getTweets(sys.argv[1])
+	print ("Running EDCoW on "+sys.argv[1])
+	dataset = sys.argv[1]
 else:
-	print ("Running featureTrajectories on data/manchester_attack.csv")
-	tweetList, t1_time, t2_time = readTweets.getTweets('data/manchester_attack.csv')
+	print ("Running EDCoW on data/manchester_attack.csv")
+	dataset = 'data/manchester_attack.csv'
+
+
+tweetList, t1_time, t2_time = readTweets.getTweets(dataset)
 
 # bucketSize (1=seconds,60=minutes,3600=hours,86400=days)
 bucketSize = 60
@@ -30,7 +33,7 @@ tweetBuckets,_ = readTweets.tweetsToBuckets(tweetList,bucketSize,t1_time,t2_time
 
 cur_time = len(tweetBuckets) 
 
-# Build the set of all words including preprocessing and filtering 
+# Build the bag of words (after preprocessing)
 words = edcow.get_words(tweetBuckets)
 
 # Signal for each word
@@ -100,7 +103,8 @@ for cluster in comm:
 	for i in cluster:
 		for j in cluster:
 			deg_c += cross_corr[i,j]
-	# eps = deg_c * math.exp(1.5*n) / math.factorial(2.0*n)  #THIS NEEDS FIXING
-	# if eps >= 0.1:
-	# 	good_clusters.append(cluster)
+	if n < 50:
+		eps = deg_c * math.exp(1.5*n) / math.factorial(2.0*n)  #THIS NEEDS FIXING
+		if eps >= 0.1:
+			good_clusters.append(cluster)
 	print("Clustered Words:", [words[i] for i in cluster])

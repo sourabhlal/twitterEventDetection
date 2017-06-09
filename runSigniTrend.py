@@ -6,15 +6,15 @@ from tqdm import tqdm
 
 from signiTrend import signiTrend as st
 
-import readTweets
-import preprocessing
+from helper import preprocessing
+from helper import readTweets
 
 if len(sys.argv) == 2:
-	print ("Running featureTrajectories on "+sys.argv[1])
+	print ("Running SigniTrend on "+sys.argv[1])
 	dataset = sys.argv[1]
 else:
-	print ("Running featureTrajectories on data/manchester_attack.csv")
-	tweetList, t1_time, t2_time = readTweets.getTweets('data/manchester_attack.csv')
+	print ("Running SigniTrend on data/manchester_attack.csv")
+	dataset = 'data/manchester_attack.csv'
 
 # bucketSize (1=seconds,60=minutes,3600=hours,86400=days)
 bucketSize = 60
@@ -24,7 +24,7 @@ window_size = 4
 hash_table_bits = 10
 hash_function_count = 4
 bias = 0.1
-alerting_threshold = -0.8
+alerting_threshold = 0.2
 
 #getTweets and separate to buckets based on epoch
 tweetList, t1_time, t2_time = readTweets.getTweets(dataset)
