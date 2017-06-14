@@ -1,8 +1,8 @@
 # Event Detection in Twitter
-###About
+### About
 This repository contains code used for the Semester Project: "Benchmarking specific and general event detection aproaches" for the LSIR Lab at EPFL. 
 
-###Dependancies
+### Dependancies
 Please install the following:
 ```
 pip3 install numpy
@@ -17,10 +17,12 @@ pip3 install pympler
 pip install sparselsh
 ```
 
-###Data
+### Data
+
 The datasets can be found in the /data directory. Note: randomTweets.csv was too large to commit on GitHub, and so was the compressed zip file. So please concatinate the 4 files randomTweets1.csv, randomTweets2.csv, randomTweets3.csv, and randomTweets4.csv into one file called randomTweets.csv before using the code provided.
 
-###Running the code
+### Running the code
+
 In order to test the code, you can do the following:
 #### FeatureTracking:
 ```
