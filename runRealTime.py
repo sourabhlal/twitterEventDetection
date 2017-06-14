@@ -346,7 +346,7 @@ for idx,tweet in enumerate(tweetList):
 	if idx % 100 == 0:
 		print ('Total Processed Tweets: {}'.format(idx))
 
-	t = (int(tweet['createdAtAsLong']) - t1_time) // 60
+	t = (int(tweet['createdAtAsLong']) - t1_time) // bucketSize
 	
 	#vector representing document
 	vec = [0]*len(featTraj.keys())

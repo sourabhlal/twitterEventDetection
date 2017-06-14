@@ -1,7 +1,7 @@
 import sys, csv, math
 from collections import defaultdict
 
-def getTweets(filename):
+def getTweets(filename,nthTweet):
 	"""
 	Extracts tweets from csv file
 	:param filename: name of csv file that contains tweet information (column 1 has time, columnn 2 has text, no title)
@@ -12,18 +12,20 @@ def getTweets(filename):
 	tweetList = []
 	t1_time = sys.maxsize
 	t2_time = 0
-
+	tweetNum = 0
 	with open(filename, 'r') as csvfile:
 		reader = csv.reader(csvfile,quotechar='"', delimiter=',',quoting=csv.QUOTE_ALL, skipinitialspace=True)
 		for row in reader:
-			tweetDict = defaultdict(dict)
-			tweetDict["createdAtAsLong"] = int(row[0])
-			tweetDict["text"] = row[1]
-			tweetList.append(tweetDict)
-			if tweetDict["createdAtAsLong"] < t1_time:
-				t1_time = tweetDict["createdAtAsLong"]
-			if tweetDict["createdAtAsLong"] > t2_time:
-				t2_time = tweetDict["createdAtAsLong"]
+			if tweetNum % nthTweet == 0:
+				tweetDict = defaultdict(dict)
+				tweetDict["createdAtAsLong"] = int(row[0])
+				tweetDict["text"] = row[1]
+				tweetList.append(tweetDict)
+				if tweetDict["createdAtAsLong"] < t1_time:
+					t1_time = tweetDict["createdAtAsLong"]
+				if tweetDict["createdAtAsLong"] > t2_time:
+					t2_time = tweetDict["createdAtAsLong"]
+			tweetNum +=1
 	return tweetList, t1_time, t2_time
 
 def tweetsToBuckets(tweets,timeStepSize,t1_time,t2_time):

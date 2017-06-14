@@ -35,7 +35,10 @@ def heuristic_stop_word_detection(features, stopwords,FLAG):
 	Returns stopwords: updated list of stopwords
 	Returns UDPS: max DPS of set of stopwords
 	"""
-	init_trajectory = features[stopwords[0]]
+	try:
+		init_trajectory = features[stopwords[0]]
+	except KeyError:
+		init_trajectory = features[stopwords[1]]
 	_,UDPS = spectral_analysis_for_dominant_period(init_trajectory)
 	UDFIDF = average_dfidf(init_trajectory)
 	LDFIDF = UDFIDF

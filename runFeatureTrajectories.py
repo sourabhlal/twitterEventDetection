@@ -19,13 +19,30 @@ else:
 	print ("Running featureTrajectories on data/manchester_attack.csv")
 	dataset = 'data/manchester_attack.csv'
 
-tweetList, t1_time, t2_time = readTweets.getTweets(dataset)
-
-for t in tweetList:
-	t["text"]=preprocessing.getTokens(t["text"],False)
+tweetList, t1_time, t2_time = readTweets.getTweets(dataset,1)
 
 # bucketSize (1=seconds,60=minutes,3600=hours,86400=days)
 bucketSize = 60
+
+"""
+USE THIS CODE INSTEAD OF LINES 15-25,56 if you want to test using the Random Attacks dataset
+tweetList1, t1_time, t2_time = readTweets.getTweets('data/randomTweets.csv',5)
+tweetList2, t3_time, t4_time = readTweets.getTweets('data/attackTweets.csv',1)
+
+tweetList = tweetList1+tweetList2
+
+if t3_time<t1_time:
+	t1_time = t3_time
+if t2_time<t4_time:
+	t2_time = t4_time	
+
+# bucketSize (1=seconds,60=minutes,3600=hours,86400=days)
+bucketSize = 86400
+FLAG = 800
+"""
+
+for t in tweetList:
+	t["text"]=preprocessing.getTokens(t["text"],False)
 
 #build feature trajectories
 features, Mf = dr.build_feature_trajectories(tweetList, t1_time, t2_time, bucketSize)

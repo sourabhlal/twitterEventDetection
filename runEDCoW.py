@@ -23,7 +23,7 @@ else:
 	dataset = 'data/manchester_attack.csv'
 
 
-tweetList, t1_time, t2_time = readTweets.getTweets(dataset)
+tweetList, t1_time, t2_time = readTweets.getTweets(dataset,1)
 
 # bucketSize (1=seconds,60=minutes,3600=hours,86400=days)
 bucketSize = 60
